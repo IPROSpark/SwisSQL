@@ -1,6 +1,6 @@
 import sys
 import os
-from argparse import ArgumentParser, Namespace
+from argparse import ArgumentParser, Namespace, BooleanOptionalAction
 from swissql.analyzers.style.sql_style_error import SqlfluffCheck
 from swissql.analyzers.anti_pattern.anti_pattern_finder import AntiPatternFinder
 from swissql.analyzers.syntax.sql_parser import SqlParser
@@ -17,7 +17,7 @@ from swissql.manifest import Manifest
 class ArgParser:
     parser: ArgumentParser
     args: Namespace
-    modes: list[str] = ["syntax", "format", "optimize", "style", "anti_pattern", "extract", "rule"]
+    modes: list[str] = ["syntax", "format", "optimize", "style", "anti_pattern", "rule"]
 
     @staticmethod
     def __pair_or(argument: str) -> bool:
@@ -28,9 +28,24 @@ class ArgParser:
         return argument in sys.argv
 
     @classmethod
-    def __get_query(cls) -> str:
+    def __get_queries(cls) -> list[str]:
+        queries = None
         if cls.args.q:
-            return cls.args.q
+            queries = cls.args.q.split(';')
+        elif cls.args.x:
+            SqlFinder.initialize()
+            if not cls.args.f:
+                raise Error('no file provided')
+            filename = cls.args.f
+            print('\u001b[33m[Extracting Spark SQLs from file using lark]\u001b[0m')
+            sqls = SqlFinder.extract_sql_from_file(filename)
+            if sqls:
+                print('Found:')
+                for sql in sqls:
+                    print(sql)
+            else:
+                print('Did not find any SQLs')
+            queries = sqls
         elif cls.args.f:
             query = ""
             try:
@@ -38,9 +53,12 @@ class ArgParser:
                     query = f.read()
             except FileNotFoundError as e:
                 raise Error("query file not found") from e
-            return query
+            queries = query.split(';')
         else:
             raise Error("either -q or -f argument is required")
+        queries = list(map(lambda x: x.strip(), queries))
+        queries = list(filter(lambda x: x, queries))
+        return queries
 
     @classmethod
     def initialize(cls) -> None:
@@ -66,6 +84,12 @@ class ArgParser:
             # "--file-sql",
             required=cls.__pair_or("-q"),
             help="specify file to read SQL query from",
+        )
+        cls.parser.add_argument(
+            "-x",
+            # "--extract",
+            action=BooleanOptionalAction,
+            help="specify if queries should be extracted from source files"
         )
         cls.parser.add_argument(
             "-s",
@@ -113,25 +137,7 @@ class ArgParser:
 
     @classmethod
     @exception_handler()
-    def choose_analyzer(cls, mode=None) -> None:
-        mode = cls.args.mode if mode is None else mode
-        if mode == 'extract':
-            SqlFinder.initialize()
-            if not cls.args.f:
-                raise Error('no file provided')
-            filename = cls.args.f
-            print('\u001b[33m[Extracting Spark SQLs from file using lark]\u001b[0m')
-            sqls = SqlFinder.extract_sql_from_file(filename)
-            if sqls:
-                print('Found:')
-                for sql in sqls:
-                    print(sql)
-            else:
-                print('Did not find any SQLs')
-            return
-        
-        
-        query = cls.__get_query()
+    def analyze_one(cls, query: str, mode: str) -> None:
         if mode == "syntax":
             print("\u001b[33m[Generating syntax tree using sqlglot]\u001b[0m")
             output = SqlParser.parse_tree(query)
@@ -204,5 +210,13 @@ class ArgParser:
             for mode in cls.modes:
                 if mode in ["extract"]:
                     continue
-                cls.choose_analyzer(mode)
+                cls.analyze_one(query, mode)
                 print()
+
+    @classmethod
+    def analyze_queries(cls) -> None:
+        queries = cls.__get_queries()
+        for query in queries:
+            print(f'\u001b[33m[Analyzing query:\u001b[35m {query}\u001b[33m]\u001b[37m')
+            cls.analyze_one(query, cls.args.mode)
+       
