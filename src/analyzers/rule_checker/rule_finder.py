@@ -2,6 +2,7 @@ from lark import Tree
 from os import listdir
 from os.path import join
 from src.analyzers.rule_checker.custom_rule import CustomRule
+from src.analyzers.rule_checker.transformers.tree_pattern_find import TreePatternFind
 from src.utils.exceptions import Error
 
 class RuleFinder:
@@ -56,11 +57,13 @@ class RuleFinder:
         return list(cls.rule_files)
 
     @classmethod
-    def find_rules(cls, sql: str) -> list[Tree]:
-        trees = list()
+    def find_rules(cls, sql: str) -> list[(CustomRule, list[(int, int)])]:
+        found = list()
         for rule in cls.rules:
             tree = rule.parse_sql_tree(sql)
-            print(repr(tree))
-            trees.append(tree)
-        return trees
+            finder = TreePatternFind()
+            finder.visit(tree)
+            if len(finder.positions) > 0:
+                found.append((rule, finder.positions))
+        return found
 

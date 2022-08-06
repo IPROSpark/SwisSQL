@@ -6,6 +6,7 @@ from src.utils.schema_reader import SchemaReader
 from src.utils.exceptions import Error, exception_handler
 from src.analyzers.optimizations.static_optimizer import StaticOptimizer 
 from src.analyzers.rule_checker.rule_finder import RuleFinder
+from src.analyzers.rule_checker.custom_rule import CustomRule
 from src.manifest import Manifest
 
 class ArgParser:
@@ -95,7 +96,12 @@ class ArgParser:
                 RuleFinder.load_rules()
             else:
                 RuleFinder.load_rule(rule)
-            RuleFinder.find_rules(query)    
+            found = RuleFinder.find_rules(query)
+            for rule in found:
+                print(f'Rule {rule[0].name}:')
+                print(f'Position: {rule[1][0]}, {rule[1][1]}')
+                print(f'Comment: {rule[0].comment}')
+                print()
 
         elif mode == 'all':
             for mode in cls.modes:
