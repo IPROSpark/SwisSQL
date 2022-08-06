@@ -1,5 +1,6 @@
 
 import os
+import pathlib
 from typing import Any, Union
 from sqlfluff.cli.commands import cli
 
@@ -13,17 +14,18 @@ class SqlfluffCheck:
         self.mode = mode
         self.help = help
         # TODO пофиксить создание файла
-        self.filename = 'intermediate.sql'
+        self.filename = pathlib.Path(__file__).parent.resolve().joinpath(pathlib.Path('intermediate.sql'))
     
     def create_str(self) -> str:
         string = "sqlfluff"
         if self.help:
             return string + ' -' + self.help
         if self.mode:
-            string =  string + ' '+ self.mode
+            string =  string + ' ' + self.mode
         if self.file:
             string =  string + ' ' + self.file
         elif self.querry:
+            
             with open(self.filename, "w") as f:
                 f.write(self.querry)
             string = string + ' ' + self.filename

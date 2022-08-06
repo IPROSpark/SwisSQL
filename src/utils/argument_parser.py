@@ -57,35 +57,35 @@ class ArgParser:
             description=Manifest.APP_DESCRIPTION,
         )
         cls.parser.add_argument(
-            "mode", choices=cls.modes + ["all", "style"], description="module to use"
+            "mode", choices=cls.modes + ["all", "style"], help="module to use"
         )
         cls.parser.add_argument(
-            "-q", required=cls.__pair_or("-f"), description="specify sql query"
+            "-q", required=cls.__pair_or("-f"), help="specify sql query"
         )
         cls.parser.add_argument(
             "-f",
             required=cls.__pair_or("-q"),
-            description="specify file to read sql query from",
+            help="specify file to read sql query from",
         )
-        cls.parser.add_argument("-s", description="pass query schema")
-        cls.parser.add_argument("-F", description="read query schema from file")
+        cls.parser.add_argument("-s", help="pass query schema")
+        cls.parser.add_argument("-F", help="read query schema from file")
         cls.parser.add_argument(
-            "-o", choices=optimizers, description="choose optimizers"
+            "-o", choices=optimizers, help="choose optimizers"
         )
-        # cls.parser.add_argument('-c', description="?")
+        # cls.parser.add_argument('-c', help="?")
         cls.parser.add_argument(
             "--dialect",
             default="sparksql",
-            description="specify sql dialect for sqlfluff",
+            help="specify sql dialect for sqlfluff",
         )
         cls.parser.add_argument(
-            "--rules", description="read rules from file for sqlfluff"
+            "--rules", help="read rules from file for sqlfluff"
         )
         cls.parser.add_argument(
             "--output-mode",
             default="str",
             choices=["str", "json"],
-            description="specify output format",
+            help="specify output format",
         )
         cls.args = cls.parser.parse_args()
 
