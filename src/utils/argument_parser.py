@@ -7,13 +7,14 @@ from src.utils.exceptions import Error, exception_handler
 from src.analyzers.optimizations.static_optimizer import StaticOptimizer 
 from src.analyzers.rule_checker.rule_finder import RuleFinder
 from src.analyzers.rule_checker.custom_rule import CustomRule
+from src.analyzers.rule_checker.sql_finder import SqlFinder
 from src.manifest import Manifest
 
 class ArgParser:
     parser: ArgumentParser
     args: Namespace
 
-    modes: list[str] = ['syntax', 'format', 'optimize','rule']
+    modes: list[str] = ['syntax', 'format', 'optimize','rule', 'extract']
 
     @staticmethod
     def __pair_or(argument: str) -> bool:
@@ -61,7 +62,19 @@ class ArgParser:
     @classmethod
     @exception_handler()
     def choose_analyzer(cls, mode=None) -> None:
+         
+
+
         mode = cls.args.mode if mode is None else mode
+        if mode == 'extract':
+            SqlFinder.initialize()
+            if not cls.args.f:
+                raise Error('no file provided')
+            filename = cls.args.f
+            positions = SqlFinder.extract_sql_from_file(filename)
+            print(positions)
+            return
+
         query = cls.__get_query()
         
         if mode == 'syntax':
