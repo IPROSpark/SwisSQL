@@ -1,6 +1,6 @@
 from json import loads
 from json.decoder import JSONDecodeError
-from src.utils.exceptions import Error
+from swissql.utils.exceptions import Error
 
 class SchemaReader:
 

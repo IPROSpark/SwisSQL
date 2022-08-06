@@ -1,5 +1,5 @@
 from functools import wraps 
-from src.manifest import Manifest
+from swissql.manifest import Manifest
 
 class Error(Exception):
     def __init__(self, message: str):

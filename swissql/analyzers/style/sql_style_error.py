@@ -25,10 +25,10 @@ class SqlfluffCheck:
         if self.file:
             string =  string + ' ' + self.file
         elif self.querry:
-            
+            print(self.filename)
             with open(self.filename, "w") as f:
                 f.write(self.querry)
-            string = string + ' ' + self.filename
+            string = string + ' ' + str(self.filename)
         string = string + ' --dialect ' + self.dialect
         if self.rules:
             string = string + ' --rules' + self.rules

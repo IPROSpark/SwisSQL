@@ -1,14 +1,14 @@
 import sys
 import os
 from argparse import ArgumentParser, Namespace
-from src.analyzers.style.sql_style_error import SqlfluffCheck
-from src.analyzers.anti_pattern.anti_pattern_finder import AntiPatternFinder
-from src.analyzers.syntax.sql_parser import SqlParser
-from src.analyzers.style.sql_formatter import SqlFormatter
-from src.utils.schema_reader import SchemaReader
-from src.utils.exceptions import Error, exception_handler
-from src.analyzers.optimizations.static_optimizer import StaticOptimizer
-from src.manifest import Manifest
+from swissql.analyzers.style.sql_style_error import SqlfluffCheck
+from swissql.analyzers.anti_pattern.anti_pattern_finder import AntiPatternFinder
+from swissql.analyzers.syntax.sql_parser import SqlParser
+from swissql.analyzers.style.sql_formatter import SqlFormatter
+from swissql.utils.schema_reader import SchemaReader
+from swissql.utils.exceptions import Error, exception_handler
+from swissql.analyzers.optimizations.static_optimizer import StaticOptimizer
+from swissql.manifest import Manifest
 
 
 class ArgParser:

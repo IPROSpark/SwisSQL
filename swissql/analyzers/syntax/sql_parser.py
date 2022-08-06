@@ -1,6 +1,6 @@
 from sqlglot import parse_one
 from sqlglot.errors import ParseError
-from src.utils.exceptions import Error
+from swissql.utils.exceptions import Error
 
 class SqlParser:
     # parser: Lark
