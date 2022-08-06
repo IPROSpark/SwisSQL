@@ -50,7 +50,7 @@ class RuleFinder:
     @classmethod
     def load_rules(cls):
         for rule_file in cls.rule_files:
-            cls.load_rule()            
+            cls.load_rule(rule_file)            
     
     @classmethod
     def get_rules(cls) -> list[str]:
@@ -60,7 +60,10 @@ class RuleFinder:
     def find_rules(cls, sql: str) -> list[(CustomRule, list[(int, int)])]:
         found = list()
         for rule in cls.rules:
-            tree = rule.parse_sql_tree(sql)
+            try:
+                tree = rule.parse_sql_tree(sql)
+            except Exception as e:
+                continue
             finder = TreePatternFinder()
             finder.visit(tree)
             if len(finder.positions) > 0:

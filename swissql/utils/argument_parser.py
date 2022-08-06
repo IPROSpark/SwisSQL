@@ -95,6 +95,10 @@ class ArgParser:
             choices=rules+['all',],
             help='specify rule file'
         )
+        cls.parser.add_argument(
+            "--rules-sqlfluff",
+            help="specify rules file for sqlfluff",
+        )
         # cls.parser.add_argument("-c", help="specify")
         cls.parser.add_argument(
             "--dialect", default="sparksql", help="specify sqlfluff dialect"
@@ -144,7 +148,7 @@ class ArgParser:
                 "lint",
                 file=cls.args.f,
                 q=cls.args.q,
-                rules=cls.args.rules,
+                rules=cls.args.rules_sqlfluff,
                 dialect=cls.args.dialect,
             ).create_str()
             print(output)
@@ -179,6 +183,7 @@ class ArgParser:
                 raise Error("either -q or -f argument is required")
             print(sqlcheck_output)
         elif mode == 'rule':
+            print('\u001b[33m[Finding rules using lark]\u001b[0m')
             rule = cls.args.r
             if not rule:
                 raise Error('no rule specified')
@@ -187,14 +192,17 @@ class ArgParser:
             else:
                 RuleFinder.load_rule(rule)
             found = RuleFinder.find_rules(query)
-            print('\u001b[33m[Finding rules using lark]\u001b[0m')
-            for rule in found:
-                print(f'Rule {rule[0].name} found:')
-                print(f'Position: {rule[1][0]}, {rule[1][1]}')
-                print(f'Comment: {rule[0].comment}')
+            for composition in found:
+                rule, positions = composition
+                positions = ' '.join([str(el) for el in positions])
+                print(f'Rule {rule.name} found:')
+                print(f'Positions: {positions}')
+                print(f'Comment: {rule.comment}')
                 print()
-                
+
         elif mode == "all":
             for mode in cls.modes:
+                if mode in ["extract"]:
+                    continue
                 cls.choose_analyzer(mode)
                 print()

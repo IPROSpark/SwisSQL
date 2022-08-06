@@ -1,0 +1,6 @@
+SELECT WILDCARD ANTIPATTERN :END_OF_COMMENT:
+start: /./ start | pattern start | /./ | pattern
+pattern: "SELECT *"i
+%import common.INT
+//%ignore " "
+%ignore "\n"
