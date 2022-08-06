@@ -1,6 +1,5 @@
 import sys
 from argparse import ArgumentParser, Namespace
-from src.analyzers.syntax.sql_parser import SqlParser
 from src.analyzers.style.sql_formatter import SqlFormatter
 from src.utils.schema_reader import SchemaReader
 from src.utils.exceptions import Error, exception_handler
