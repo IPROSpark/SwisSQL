@@ -66,14 +66,15 @@ class ArgParser:
             output = SqlFormatter.format_one(query)
             print(output)
         elif mode == 'optimize':
-            schema = ''
-
-            if cls.args.s:
-                schema = SchemaReader.parse_json_schema(cls.args.s)
-            elif cls.args.F:
-                schema = SchemaReader.parse_file_json_schema(cls.args.F)
-            else:
-                raise Error('schema is not provided')
+            schema = None
+            
+            if cls.args.o in ('optimize', 'qualify_columns'):
+                if cls.args.s:
+                    schema = SchemaReader.parse_json_schema(cls.args.s)
+                elif cls.args.F:
+                    schema = SchemaReader.parse_file_json_schema(cls.args.F)
+                else:
+                    raise Error('schema is not provided')
 
             print('[Optimizing sql query using sqlglot]')
             print(f'Optimization: {cls.args.o}')
