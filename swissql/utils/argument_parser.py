@@ -12,11 +12,6 @@ from swissql.manifest import Manifest
 
 
 class ArgParser:
-    """
-    ArgumentParser class is used to parse command line arguments
-    and decide which analyzer to use
-
-    """
     parser: ArgumentParser
     args: Namespace
     modes: list[str] = ["syntax", "format", "optimize", "style", "anti_pattern"]
@@ -46,40 +41,51 @@ class ArgParser:
 
     @classmethod
     def initialize(cls) -> None:
-        """
-        Initialize the ArgParser class to get arguments from command line
-
-        :return: None
-        """
         optimizers: list[str] = StaticOptimizer.get_optimizers()
         cls.parser = ArgumentParser(
             prog=Manifest.APP_NAME,
             description=Manifest.APP_DESCRIPTION,
         )
         cls.parser.add_argument(
-            "mode", choices=cls.modes + ["all", "style"], help="module to use"
+            "mode", choices=cls.modes + ["all", "style"], help="mode of operation"
         )
         cls.parser.add_argument(
-            "-q", required=cls.__pair_or("-f"), help="specify sql query"
+            "-q",
+            # "--query",
+            required=cls.__pair_or("-f"),
+            help="specify SQL query",
         )
         cls.parser.add_argument(
             "-f",
+            # "--file-sql",
             required=cls.__pair_or("-q"),
-            help="specify file to read sql query from",
-        )
-        cls.parser.add_argument("-s", help="pass query schema")
-        cls.parser.add_argument("-F", help="read query schema from file")
-        cls.parser.add_argument(
-            "-o", choices=optimizers, help="choose optimizers"
-        )
-        # cls.parser.add_argument('-c', help="?")
-        cls.parser.add_argument(
-            "--dialect",
-            default="sparksql",
-            help="specify sql dialect for sqlfluff",
+            help="specify file to read SQL query from",
         )
         cls.parser.add_argument(
-            "--rules", help="read rules from file for sqlfluff"
+            "-s",
+            # "--schema",
+            help="""specify schema:
+        Schema is a mapping in one of
+            the following forms:\n
+                1. {table: {col: type}}\n
+                2. {db: {table: {col: type}}}\n
+                3. {catalog: {db: {table: {col: type}}}}\n
+        Example types: INT, STRING""",
+        )
+        cls.parser.add_argument(
+            "-F",
+            # "--File-schema",
+            help="specify schema file to read schema from",
+        )
+        cls.parser.add_argument(
+            "-o",
+            #  "--optimizer",
+            choices=optimizers,
+            help="specify optimizers",
+        )
+        # cls.parser.add_argument("-c", help="specify")
+        cls.parser.add_argument(
+            "--dialect", default="sparksql", help="specify sqlfluff dialect"
         )
         cls.parser.add_argument(
             "--output-mode",
@@ -87,18 +93,12 @@ class ArgParser:
             choices=["str", "json"],
             help="specify output format",
         )
+        cls.parser.add_argument("--rules", help="specify rules to apply for sqlfluff")
         cls.args = cls.parser.parse_args()
 
     @classmethod
     @exception_handler()
     def choose_analyzer(cls, mode=None) -> None:
-        """
-        Choose analyzer to run
-
-        :param mode: mode to run
-        :return: None
-
-        """
         mode = cls.args.mode if mode is None else mode
         query = cls.__get_query()
         if mode == "syntax":
