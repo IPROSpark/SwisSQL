@@ -1,0 +1,5 @@
+start: /(w+)?/ start | string start | string | /(w+)?/
+string: STRING
+STRING: /[ubf]?r?("(?!"").*?(?<!\\)(\\\\)*?"|'(?!'').*?(?<!\\)(\\\\)*?')/i
+
+%ignore "\n"
