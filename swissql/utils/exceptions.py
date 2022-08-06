@@ -1,4 +1,4 @@
-from functools import wraps 
+from functools import wraps
 from swissql.manifest import Manifest
 
 
@@ -19,7 +19,7 @@ def exception_handler():
             try:
                 return func(*args, **kwargs)
             except Error as e:
-                print(f"{Manifest.APP_NAME}: error: {e.message}")
+                print(f"\u001b[31m{Manifest.APP_NAME}: error: {e.message}\u001b[0m")
 
         return wrapper
 
