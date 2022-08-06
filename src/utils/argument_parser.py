@@ -2,19 +2,19 @@ import sys
 import os
 from argparse import ArgumentParser, Namespace
 from src.analyzers.style.sql_style_error import sqlfluff_check
+from src.analyzers.anti_pattern.anti_pattern_finder import AntiPatternFinder
 from src.analyzers.syntax.sql_parser import SqlParser
 from src.analyzers.style.sql_formatter import SqlFormatter
 from src.utils.schema_reader import SchemaReader
 from src.utils.exceptions import Error, exception_handler
-from src.analyzers.optimizations.static_optimizer import StaticOptimizer 
+from src.analyzers.optimizations.static_optimizer import StaticOptimizer
 from src.manifest import Manifest
 
 
 class ArgParser:
     parser: ArgumentParser
     args: Namespace
-
-    modes: list[str] = ['syntax', 'format', 'optimize',"style"]
+    modes: list[str] = ['syntax', 'format', 'optimize', 'style', 'anti_pattern']
 
     @staticmethod
     def __pair_or(argument: str) -> bool:
@@ -34,7 +34,7 @@ class ArgParser:
                 with open(cls.args.f, mode='r') as f:
                     query = f.read()
             except FileNotFoundError as e:
-                raise Error('query file not found') from e 
+                raise Error('query file not found') from e
             return query
         else:
             raise Error('either -q or -f argument is required')
@@ -65,17 +65,17 @@ class ArgParser:
         mode = cls.args.mode if mode is None else mode
         query = cls.__get_query()
         if mode == 'syntax':
-            print('[Generating syntax tree using sqlglot]')
+            print('\u001b[33m[Generating syntax tree using sqlglot]\u001b[0m')
             output = SqlParser.parse_tree(query)
             print(output)
         elif mode == 'format':
-            print('[Formatting sql query using sqlglot]')
+            print('\u001b[33m[Formatting sql query using sqlglot]\u001b[0m')
             output = SqlFormatter.format_one(query)
             print(output)
         elif mode == 'style':
             
             
-            print("Style sql query use sqlfluff")
+            print("\u001b[33m[Style sql query use sqlfluff]\u001b[0m")
             # получаем ссылку на файл с помощью lark
             #print(cls.args.f)
             
@@ -94,11 +94,24 @@ class ArgParser:
                 else:
                     raise Error('schema is not provided')
 
-            print('[Optimizing sql query using sqlglot]')
+            print('\u001b[33m[Optimizing sql query using sqlglot]\u001b[0m')
             print(f'Optimization: {cls.args.o}')
-            
             optimized = StaticOptimizer.optimize(cls.args.o, query, schema)
             print(optimized)
+
+        elif mode == 'anti_pattern':
+            print('\u001b[33m[Detecting anti-patterns using sqlcheck]\u001b[0m')
+
+            # TODO: add verbosity level option
+            instance = AntiPatternFinder(verbose=True)
+            sqlcheck_output = ""
+            if cls.args.f:
+                sqlcheck_output = instance.find_anti_patterns_from_file(cls.args.f)
+            elif cls.args.q:
+                sqlcheck_output = instance.find_anti_patterns_from_query(cls.args.q)
+            else:
+                raise Error('either -q or -f argument is required')
+            print(sqlcheck_output)
 
         elif mode == 'all':
             for mode in cls.modes:

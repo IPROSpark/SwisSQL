@@ -1,0 +1,1 @@
+SELECT x.id, x.name, y.name from x join y on x.id = y.id where x.id > 2
