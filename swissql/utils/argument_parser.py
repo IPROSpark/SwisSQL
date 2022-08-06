@@ -71,7 +71,7 @@ class ArgParser:
             description=Manifest.APP_DESCRIPTION,
         )
         cls.parser.add_argument(
-            "mode", choices=cls.modes + ["all", "style"], help="mode of operation"
+            "mode", choices=cls.modes + ["all", "construct"], help="mode of operation"
         )
         cls.parser.add_argument(
             "-q",
@@ -118,6 +118,13 @@ class ArgParser:
             # "--rule",
             choices=rules+['all',],
             help='specify rule file'
+        )
+        cls.parser.add_argument(
+            '-c',
+            # "--choice",
+            choices=cls.modes,
+            help='specify modes for analysis constructor',
+            action='append'
         )
         cls.parser.add_argument(
             "--rules-sqlfluff",
@@ -205,11 +212,12 @@ class ArgParser:
                 print(f'Positions: {positions}')
                 print(f'Comment: {rule.comment}')
                 print()
-
+        elif mode == "construct":
+            for mode in cls.args.c:
+                cls.analyze_one(query, mode)
+                print()
         elif mode == "all":
             for mode in cls.modes:
-                if mode in ["extract"]:
-                    continue
                 cls.analyze_one(query, mode)
                 print()
 
