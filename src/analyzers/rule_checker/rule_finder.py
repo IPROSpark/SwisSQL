@@ -2,7 +2,7 @@ from lark import Tree
 from os import listdir
 from os.path import join
 from src.analyzers.rule_checker.custom_rule import CustomRule
-from src.analyzers.rule_checker.transformers.tree_pattern_find import TreePatternFind
+from src.analyzers.rule_checker.tree_pattern_find import TreePatternFind
 from src.utils.exceptions import Error
 
 class RuleFinder:

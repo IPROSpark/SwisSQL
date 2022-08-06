@@ -97,8 +97,9 @@ class ArgParser:
             else:
                 RuleFinder.load_rule(rule)
             found = RuleFinder.find_rules(query)
+            print('[Finding rules using lark]')
             for rule in found:
-                print(f'Rule {rule[0].name}:')
+                print(f'Rule {rule[0].name} found:')
                 print(f'Position: {rule[1][0]}, {rule[1][1]}')
                 print(f'Comment: {rule[0].comment}')
                 print()
