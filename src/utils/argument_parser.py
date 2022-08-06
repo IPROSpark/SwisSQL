@@ -1,7 +1,7 @@
 import sys
 import os
 from argparse import ArgumentParser, Namespace
-from src.analyzers.style.sql_style_error import sqlfluff_check
+from src.analyzers.style.sql_style_error import SqlfluffCheck
 from src.analyzers.anti_pattern.anti_pattern_finder import AntiPatternFinder
 from src.analyzers.syntax.sql_parser import SqlParser
 from src.analyzers.style.sql_formatter import SqlFormatter
@@ -54,7 +54,7 @@ class ArgParser:
         cls.parser.add_argument('-F')
         cls.parser.add_argument('-o', choices=optimizers)
         cls.parser.add_argument('-c')
-        cls.parser.add_argument('--dialect',default='sparksql')
+        cls.parser.add_argument('--dialect', default='sparksql')
         cls.parser.add_argument('--output-mode',default='str', choices=['str','json'])
         cls.parser.add_argument('--rules')
         cls.args = cls.parser.parse_args()
@@ -79,7 +79,7 @@ class ArgParser:
             # получаем ссылку на файл с помощью lark
             #print(cls.args.f)
             
-            output = os.popen(f"sqlfluff lint {cls.args.f} --dialect {cls.args.dialect} {'--rules' + cls.args.rules if cls.args.rules else ''} ").read()
+            output = SqlfluffCheck('lint',file=cls.args.f,q=cls.args.q,rules =cls.args.rules, dialect=cls.args.dialect).create_str()
             print(output)
             #
             # Меняем позиции в тексте 
