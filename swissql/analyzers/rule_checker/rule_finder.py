@@ -22,7 +22,7 @@ class RuleFinder:
         return files
 
     @classmethod
-    def __parse_rule_file(cls, data: str) -> (str,str):
+    def __parse_rule_file(cls, data: str) -> tuple[str]:
         try:
             comment, grammar = data.split(cls.SPLITTER)
             return (comment, grammar)

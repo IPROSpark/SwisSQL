@@ -12,7 +12,7 @@ class SqlFinder:
 
 
     @classmethod
-    def __get_parser_from_filename(cls, filename: str) -> Union[Lark]:
+    def __get_parser_from_filename(cls, filename: str) -> Lark:
         return cls.python_parser
 
     @classmethod
