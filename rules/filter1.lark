@@ -1,0 +1,5 @@
+Some comment :END_OF_COMMENT:
+start: /\w+/ start |  INT start | /\w+/ | INT
+%import common.INT
+%ignore " "
+%ignore "\n"
