@@ -8,6 +8,7 @@ from src.utils.exceptions import Error, exception_handler
 from src.analyzers.optimizations.static_optimizer import StaticOptimizer
 from src.manifest import Manifest
 
+
 class ArgParser:
     parser: ArgumentParser
     args: Namespace
@@ -59,11 +60,11 @@ class ArgParser:
         query = cls.__get_query()
 
         if mode == 'syntax':
-            print('[Generating syntax tree using sqlglot]')
+            print('\u001b[33m[Generating syntax tree using sqlglot]\u001b[0m')
             output = SqlParser.parse_tree(query)
             print(output)
         elif mode == 'format':
-            print('[Formatting sql query using sqlglot]')
+            print('\u001b[33m[Formatting sql query using sqlglot]\u001b[0m')
             output = SqlFormatter.format_one(query)
             print(output)
         elif mode == 'optimize':
@@ -76,13 +77,13 @@ class ArgParser:
                 else:
                     raise Error('schema is not provided')
 
-            print('[Optimizing sql query using sqlglot]')
+            print('\u001b[33m[Optimizing sql query using sqlglot]\u001b[0m')
             print(f'Optimization: {cls.args.o}')
             optimized = StaticOptimizer.optimize(cls.args.o, query, schema)
             print(optimized)
 
         elif mode == 'anti_pattern':
-            print('[Detecting anti-patterns using sqlcheck]')
+            print('\u001b[33m[Detecting anti-patterns using sqlcheck]\u001b[0m')
 
             # TODO: add verbosity level option
             instance = AntiPatternFinder(verbose=True)
