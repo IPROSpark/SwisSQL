@@ -32,7 +32,7 @@ class StaticOptimizer:
 
     @classmethod
     def optimize(cls, optimizer: str, sql: str, schema: Union[dict, None] = None) -> Expression: 
-        expr = parse_one(sql, read='postgres') 
+        expr = parse_one(sql, read='spark') 
         optimizer = cls.optimizers[optimizer]
         optimized = optimizer(expr,schema).sql(pretty=True)
         # if optimizer == 'qualify_columns':
