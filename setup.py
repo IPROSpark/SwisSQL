@@ -1,10 +1,23 @@
-from setuptools import setup
+from setuptools import setup, find_packages
+
+from swissql.manifest import Manifest
  
-setup(name='swissql',
-      version='0.1',
-      url='https://github.com/IPROSpark/SparkSQL-Analyzer',
-      license='GNU',
-      author='husker Nicialy Quakumei',
-      author_email='andrey24072002@bk.ru',
-      description='Library can help u with sql',
-      python_requires=">=3.7.*",)
+ 
+
+ 
+setup(name=Manifest.APP_NAME,
+      version=Manifest.APP_VERSION,
+      url=Manifest.GIT_URL,
+      license=Manifest.LICENSE,
+      author=Manifest.AUTHORS_GIT,
+      author_email=Manifest.EMAIL,
+      packages= find_packages(),
+      install_requires = Manifest.REQUIREMENTS ,
+      description=Manifest.APP_DESCRIPTION,
+      long_description=open('README.md').read(),
+      python_requires=">=3.7.*",
+      entry_points={
+        'console_scripts': [
+            'swissql = swissql.main:main_start',
+        ]}
+      )

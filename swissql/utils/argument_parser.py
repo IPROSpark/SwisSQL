@@ -15,7 +15,7 @@ from swissql.manifest import Manifest
 
 
 class ArgParser:
-    parser: ArgumentParser
+    parser: ArgumentParser(prog='swissql')
     args: Namespace
     modes: list[str] = ["syntax", "format", "optimize", "style", "anti_pattern", "extract", "rule"]
 

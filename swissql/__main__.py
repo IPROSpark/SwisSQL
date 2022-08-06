@@ -1,3 +1,4 @@
+#!/bin/python3
 from swissql.main import main_start
 
 
