@@ -5,13 +5,14 @@ from src.analyzers.style.sql_formatter import SqlFormatter
 from src.utils.schema_reader import SchemaReader
 from src.utils.exceptions import Error, exception_handler
 from src.analyzers.optimizations.static_optimizer import StaticOptimizer 
+from src.analyzers.rule_checker.rule_finder import RuleFinder
 from src.manifest import Manifest
 
 class ArgParser:
     parser: ArgumentParser
     args: Namespace
 
-    modes: list[str] = ['syntax', 'format', 'optimize']
+    modes: list[str] = ['syntax', 'format', 'optimize','rule']
 
     @staticmethod
     def __pair_or(argument: str) -> bool:
@@ -34,8 +35,13 @@ class ArgParser:
 
 
     @classmethod
+    @exception_handler()
     def initialize(cls) -> None:
+        RuleFinder.initialize()
+        
+        rules = RuleFinder.get_rules()
         optimizers: list[str] = StaticOptimizer.get_optimizers()
+        
         cls.parser = ArgumentParser(
             prog=Manifest.APP_NAME,
             description=Manifest.APP_DESCRIPTION,
@@ -46,9 +52,9 @@ class ArgParser:
         cls.parser.add_argument('-s')
         cls.parser.add_argument('-F')
         cls.parser.add_argument('-o', choices=optimizers)
+        cls.parser.add_argument('-r', choices=rules + ['all',])
         cls.parser.add_argument('-c')
         cls.parser.add_argument('--output-mode',default='str', choices=['str','json'])
-
         cls.args = cls.parser.parse_args()
 
     @classmethod
@@ -81,6 +87,15 @@ class ArgParser:
             
             optimized = StaticOptimizer.optimize(cls.args.o, query, schema)
             print(optimized)
+        elif mode == 'rule':
+            rule = cls.args.r
+            if not rule:
+                raise Error('no rule specified')
+            if rule == 'all':
+                RuleFinder.load_rules()
+            else:
+                RuleFinder.load_rule(rule)
+            RuleFinder.find_rules(query)    
 
         elif mode == 'all':
             for mode in cls.modes:
