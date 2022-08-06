@@ -3,11 +3,12 @@ from lark import Tree, Lark
 from os import listdir
 from os.path import join
 from src.analyzers.rule_checker.custom_rule import CustomRule
-from src.analyzers.rule_checker.tree_pattern_find import TreeSqlFinder
+from src.analyzers.rule_checker.tree_pattern_find import TreeStringFinder
 from src.utils.exceptions import Error
 
 class SqlFinder:
     python_parser: Lark
+    sql_parser: Lark
 
 
     @classmethod
@@ -16,27 +17,51 @@ class SqlFinder:
 
     @classmethod
     def initialize(cls):
-        sql_grammar_file = 'src/analyzers/rule_checker/grammar/python3.lark'
-        grammar = ''
-        with open(sql_grammar_file, mode='r') as f:
-            grammar = f.read()
+        python_grammar_file = 'src/analyzers/rule_checker/grammar/python3.lark'
+        python_grammar = ''
+        with open(python_grammar_file, mode='r') as f:
+            python_grammar = f.read()
         cls.python_parser = Lark(
-            grammar,
+            python_grammar,
             parser='lalr',
             lexer='basic',
             start='file_input',
+        )
+        sql_grammar_file = 'src/analyzers/rule_checker/grammar/sql.lark'
+        sql_grammar = ''
+        with open(sql_grammar_file, mode='r') as f:
+            sql_grammar = f.read()
+        cls.sql_parser = Lark(
+            sql_grammar,
+            parser='lalr',
+            lexer='basic',
+            start='start',
             propagate_positions=True,
         )
 
     @classmethod
-    def extract_sql_from_file(cls, filename: str) -> list[(int, int)]:
+    def extract_sql_from_file(cls, filename: str) -> list[str]:
         parser = cls.__get_parser_from_filename(filename)
         data = ''
-        with open(filename, mode='r') as f:
-            data = f.read()
-        tree = parser.parse(data)
-        print(tree)
-        finder = TreeSqlFinder()
-        finder.visit(tree)
-        start_positions = finder.start_positions
-        return start_positions
+        try:
+            with open(filename, mode='r') as f:
+                data = f.read()
+        except FileNotFoundError as e:
+            raise Error('file not found')
+        try:
+            tree = parser.parse(data)
+        except Exception as e:
+            raise Error('input file too complicated to parse')
+        string_finder = TreeStringFinder()
+        string_finder.visit(tree)
+        strings = string_finder.strings
+
+        sqls = list()
+        for string in strings:
+            string = string.strip('"').strip("'")   
+            try:
+                tree = cls.sql_parser.parse(string)
+            except Exception as e:
+                continue
+            sqls.append(string)
+        return sqls

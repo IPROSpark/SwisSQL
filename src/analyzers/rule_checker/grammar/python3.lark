@@ -162,10 +162,7 @@ yield_arg: "from" test | testlist
 
 
 number: DEC_NUMBER | HEX_NUMBER | BIN_NUMBER | OCT_NUMBER | FLOAT_NUMBER | IMAG_NUMBER
-string: sql_string | STRING | LONG_STRING 
-
-sql_string: "\"ABOBA\""
-
+string: STRING | LONG_STRING
 // Tokens
 
 NAME: /[a-zA-Z_]\w*/
@@ -173,7 +170,7 @@ COMMENT: /#[^\n]*/
 _NEWLINE: ( /\r?\n[\t ]*/ | COMMENT )+
 
 
-STRING: /[ubf]?r?("(?!"").*?(?<!\\)(\\\\)*?"|'(?!'').*?(?<!\\)(\\\\)*?')/i
+STRING : /[ubf]?r?("(?!"").*?(?<!\\)(\\\\)*?"|'(?!'').*?(?<!\\)(\\\\)*?')/i
 LONG_STRING: /[ubf]?r?(""".*?(?<!\\)(\\\\)*?"""|'''.*?(?<!\\)(\\\\)*?''')/is
 
 DEC_NUMBER: /0|[1-9]\d*/i

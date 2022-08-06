@@ -55,7 +55,6 @@ class ArgParser:
         cls.parser.add_argument('-F')
         cls.parser.add_argument('-o', choices=optimizers)
         cls.parser.add_argument('-r', choices=rules + ['all',])
-        cls.parser.add_argument('-c')
         cls.parser.add_argument('--output-mode',default='str', choices=['str','json'])
         cls.args = cls.parser.parse_args()
 
@@ -71,8 +70,14 @@ class ArgParser:
             if not cls.args.f:
                 raise Error('no file provided')
             filename = cls.args.f
-            positions = SqlFinder.extract_sql_from_file(filename)
-            print(positions)
+            print('[Extracting Spark SQLs from file using lark]')
+            sqls = SqlFinder.extract_sql_from_file(filename)
+            if sqls:
+                print('Found:')
+                for sql in sqls:
+                    print(sql)
+            else:
+                print('Did not find any SQLs')
             return
 
         query = cls.__get_query()
