@@ -1,2 +1,3 @@
 lark==1.1.2
+sqlfluff==1.2.1
 sqlglot==4.2.9

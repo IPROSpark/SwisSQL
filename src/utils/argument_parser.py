@@ -1,5 +1,7 @@
 import sys
+import os
 from argparse import ArgumentParser, Namespace
+from src.analyzers.style.sql_style_error import sqlfluff_check
 from src.analyzers.anti_pattern.anti_pattern_finder import AntiPatternFinder
 from src.analyzers.syntax.sql_parser import SqlParser
 from src.analyzers.style.sql_formatter import SqlFormatter
@@ -12,12 +14,15 @@ from src.manifest import Manifest
 class ArgParser:
     parser: ArgumentParser
     args: Namespace
-
-    modes: list[str] = ['syntax', 'format', 'optimize', 'anti_pattern']
+    modes: list[str] = ['syntax', 'format', 'optimize', 'style', 'anti_pattern']
 
     @staticmethod
     def __pair_or(argument: str) -> bool:
         return argument not in sys.argv
+    
+    @staticmethod
+    def __pair_and(argument: str) -> bool:
+        return argument in sys.argv
 
     @classmethod
     def __get_query(cls) -> str:
@@ -42,15 +47,16 @@ class ArgParser:
             prog=Manifest.APP_NAME,
             description=Manifest.APP_DESCRIPTION,
         )
-        cls.parser.add_argument('mode', choices=cls.modes + ['all',])
+        cls.parser.add_argument('mode', choices=cls.modes + ['all','style'])
         cls.parser.add_argument('-q', required=cls.__pair_or('-f'))
         cls.parser.add_argument('-f', required=cls.__pair_or('-q'))
         cls.parser.add_argument('-s')
         cls.parser.add_argument('-F')
         cls.parser.add_argument('-o', choices=optimizers)
         cls.parser.add_argument('-c')
+        cls.parser.add_argument('--dialect',default='sparksql')
         cls.parser.add_argument('--output-mode',default='str', choices=['str','json'])
-
+        cls.parser.add_argument('--rules')
         cls.args = cls.parser.parse_args()
 
     @classmethod
@@ -58,7 +64,6 @@ class ArgParser:
     def choose_analyzer(cls, mode=None) -> None:
         mode = cls.args.mode if mode is None else mode
         query = cls.__get_query()
-
         if mode == 'syntax':
             print('\u001b[33m[Generating syntax tree using sqlglot]\u001b[0m')
             output = SqlParser.parse_tree(query)
@@ -67,6 +72,18 @@ class ArgParser:
             print('\u001b[33m[Formatting sql query using sqlglot]\u001b[0m')
             output = SqlFormatter.format_one(query)
             print(output)
+        elif mode == 'style':
+            
+            
+            print("\u001b[33m[Style sql query use sqlfluff]\u001b[0m")
+            # получаем ссылку на файл с помощью lark
+            #print(cls.args.f)
+            
+            output = os.popen(f"sqlfluff lint {cls.args.f} --dialect {cls.args.dialect} {'--rules' + cls.args.rules if cls.args.rules else ''} ").read()
+            print(output)
+            #
+            # Меняем позиции в тексте 
+        
         elif mode == 'optimize':
             schema = None
             if cls.args.o in ('optimize', 'qualify_columns'):
