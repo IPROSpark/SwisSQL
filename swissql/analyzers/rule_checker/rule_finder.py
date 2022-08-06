@@ -1,9 +1,9 @@
 from lark import Tree
 from os import listdir
 from os.path import join
-from src.analyzers.rule_checker.custom_rule import CustomRule
-from src.analyzers.rule_checker.tree_pattern_find import TreePatternFinder
-from src.utils.exceptions import Error
+from swissql.analyzers.rule_checker.custom_rule import CustomRule
+from swissql.analyzers.rule_checker.tree_pattern_find import TreePatternFinder
+from swissql.utils.exceptions import Error
 
 class RuleFinder:
     SPLITTER: str = ':END_OF_COMMENT:'

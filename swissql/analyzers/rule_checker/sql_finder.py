@@ -2,9 +2,9 @@ from typing import Union
 from lark import Tree, Lark
 from os import listdir
 from os.path import join
-from src.analyzers.rule_checker.custom_rule import CustomRule
-from src.analyzers.rule_checker.tree_pattern_find import TreeStringFinder
-from src.utils.exceptions import Error
+from swissql.analyzers.rule_checker.custom_rule import CustomRule
+from swissql.analyzers.rule_checker.tree_pattern_find import TreeStringFinder
+from swissql.utils.exceptions import Error
 
 class SqlFinder:
     python_parser: Lark
@@ -17,7 +17,7 @@ class SqlFinder:
 
     @classmethod
     def initialize(cls):
-        python_grammar_file = 'src/analyzers/rule_checker/grammar/python3.lark'
+        python_grammar_file = 'swissql/analyzers/rule_checker/grammar/python3.lark'
         python_grammar = ''
         with open(python_grammar_file, mode='r') as f:
             python_grammar = f.read()
@@ -27,7 +27,7 @@ class SqlFinder:
             lexer='basic',
             start='file_input',
         )
-        sql_grammar_file = 'src/analyzers/rule_checker/grammar/sql.lark'
+        sql_grammar_file = 'swissql/analyzers/rule_checker/grammar/sql.lark'
         sql_grammar = ''
         with open(sql_grammar_file, mode='r') as f:
             sql_grammar = f.read()
