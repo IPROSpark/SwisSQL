@@ -1,7 +1,7 @@
 
 # swissql - статический анализ SparkSQL 
 
-![swissql](https://user-images.githubusercontent.com/53406289/183268645-0daab2dc-40d6-4bbe-b302-956bb30543ba.png)
+![swissql](https://user-images.githubusercontent.com/53406289/183285962-54e376e2-c742-42f7-ae1a-445f4f8b6336.png)
 
 
 <p align="center">
