@@ -1,5 +1,4 @@
 from enum import Enum
-from tkinter import W
 from typing import Union, Callable, Optional
 from sqlglot import Expression, parse_one
 from sqlglot.optimizer import optimize
