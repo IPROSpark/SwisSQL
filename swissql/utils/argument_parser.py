@@ -196,7 +196,7 @@ class ArgParser:
                         raise Error("schema is not provided")
                 if optimization in StaticOptimizer.get_optimizers():
                     print(
-                        "\u001b[33m[Optimizing staticly sql query using sqlglot]\u001b[0m"
+                        "\u001b[33m[Optimizing staticaly sql query using sqlglot]\u001b[0m"
                     )
                     print(f"Optimization: {cls.args.o}")
                     optimized = StaticOptimizer.optimize(cls.args.o, query, schema)
@@ -216,7 +216,7 @@ class ArgParser:
                         raise Error("file with table sizes not found")
                     except Exception as e:
                         raise Error("dict parse error")
-                    print("\u001b[33m[Optimizing dynamicly sql query using lark]\u001b[0m")
+                    print("\u001b[33m[Optimizing dynamicaly sql query using lark]\u001b[0m")
                     print(f"Optimization: {cls.args.o}")
                     # try:
                     hints = DynamicOptimizer.optimize(cls.args.o, query, table_sizes)

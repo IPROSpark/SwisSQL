@@ -1,4 +1,5 @@
 from enum import Enum
+from tkinter import W
 from typing import Union, Callable, Optional
 from sqlglot import Expression, parse_one
 from sqlglot.optimizer import optimize
@@ -69,7 +70,8 @@ class StaticOptimizer:
         expr = parse_one(sql, read="spark")
         optimizer = cls.optimizers[optimizer]
         # optimized = optimizer(expr,schema).sql(pretty=True)
-        if optimizer in ["qualify_columns", "optimize"]:
+        if optimizer in [qualify_columns, optimize]:
+            print(optimizer(expr, schema))
             optimized = optimizer(expr, schema).sql(pretty=True)
         else:
             optimized = optimizer(expr).sql(pretty=True)
