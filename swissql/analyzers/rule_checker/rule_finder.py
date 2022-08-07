@@ -6,6 +6,31 @@ from swissql.analyzers.rule_checker.tree_pattern_find import TreePatternFinder
 from swissql.utils.exceptions import Error
 
 class RuleFinder:
+    """
+    Class that is used to locate user defined patterns
+
+    ...
+
+    Attributes
+    ----------
+    SPLITTER: str
+        Constant string that is used to split comment from grammar in rule file
+    PATTERN: str
+        Name of pattern to be searched in query
+    rules: list[CustomRule]
+        List of user defined rules
+
+    Methods
+    -------
+    __parse_rule_file(cls, data: str)
+        Function that parses rule file data
+    load_rule(cls, rule_file: str)
+        Loads specified rule
+    load_rules(cls, rule_files: list[str])
+        Loads list of user specified rules
+    find_rules(cls, sql: str)
+        Finds patterns in query and 
+    """
     SPLITTER: str = ':END_OF_COMMENT:'
     PATTERN: str = 'PATTERN'
 
