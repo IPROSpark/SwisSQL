@@ -49,17 +49,10 @@ class CustomRule:
         """
         self.parser = Lark(
             self.grammar,
-<<<<<<< HEAD
-            parser="lalr",
-            lexer="basic",
-            start="start",
-            propagate_positions=True,
-=======
             parser='lalr',
             lexer='basic',
             start='start',
             propagate_positions=True, # allows to store node position
->>>>>>> refs/remotes/origin/main
         )
 
     def parse_sql_tree(self, sql: str) -> Tree:

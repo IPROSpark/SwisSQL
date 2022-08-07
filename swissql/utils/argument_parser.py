@@ -152,101 +152,118 @@ class ArgParser:
     @exception_handler()
     def analyze_one(cls, query: str, mode: str) -> None:
         if mode == "syntax":
-            print("\u001b[33m[Generating syntax tree using sqlglot]\u001b[0m")
-            output = SqlParser.parse_tree(query)
-            print(output)
-        elif mode == "format":
-            print("\u001b[33m[Formatting sql query using sqlglot]\u001b[0m")
-            output = SqlFormatter.format_one(query)
-            print(output)
-        elif mode == "style":
-            print("\u001b[33m[Style sql query use sqlfluff]\u001b[0m")
-            # получаем ссылку на файл с помощью lark
-            # print(cls.args.f)
-            output = SqlfluffCheck(
-                "lint",
-                file=cls.args.f,
-                q=cls.args.q,
-                rules=cls.args.rules_sqlfluff,
-                dialect=cls.args.dialect,
-            ).create_str()
-            print(output)
-            #
-            # Меняем позиции в тексте
-        elif mode == "optimize":
-            optimization = cls.args.o
-            schema = None
-
-            if optimization in ["optimize", "qualify_columns"]:
-                if cls.args.s:
-                    schema = SchemaReader.parse_json_schema(cls.args.s)
-                elif cls.args.F:
-                    schema = SchemaReader.parse_file_json_schema(cls.args.F)
-                else:
-                    raise Error("schema is not provided")
-            if optimization in StaticOptimizer.get_optimizers():
-                print(
-                    "\u001b[33m[Optimizing staticly sql query using sqlglot]\u001b[0m"
-                )
-                print(f"Optimization: {cls.args.o}")
-                optimized = StaticOptimizer.optimize(cls.args.o, query, schema)
-                print(optimized)
-                print()
-            if optimization in DynamicOptimizer.get_optimizers():
-                table_sizes = cls.args.t
-                if not table_sizes:
-                    raise Error("no table sizes specified")
-                try:
-                    data = ""
-                    with open(cls.args.t, mode="r") as f:
-                        data = f.read()
-                    table_sizes = json.loads(data)
-                    table_sizes = [TableSize(**x) for x in table_sizes]
-                except FileNotFoundError as e:
-                    raise Error("file with table sizes not found")
-                except Exception as e:
-                    raise Error("dict parse error")
-                print("\u001b[33m[Optimizing dynamicly sql query using lark]\u001b[0m")
-                print(f"Optimization: {cls.args.o}")
-                # try:
-                hints = DynamicOptimizer.optimize(cls.args.o, query, table_sizes)
-                # except Exception as e:
-                #     raise Error('invalid table_size format') from e
-                for hint in hints:
-                    print(f"Hint: {hint[0]}")
-                    print(f"Position: ({hint[1][0]}, {hint[1][1]})")
-
-        elif mode == "anti_pattern":
-            print("\u001b[33m[Detecting anti-patterns using sqlcheck]\u001b[0m")
-
-            # TODO: add verbosity level option
-            instance = AntiPatternFinder(verbose=True)
-            sqlcheck_output = ""
-            if cls.args.f:
-                sqlcheck_output = instance.find_anti_patterns_from_file(cls.args.f)
-            elif cls.args.q:
-                sqlcheck_output = instance.find_anti_patterns_from_query(cls.args.q)
-            else:
-                raise Error("either -q or -f argument is required")
-            print(sqlcheck_output)
-        elif mode == "rule":
-            print("\u001b[33m[Finding rules using lark]\u001b[0m")
-            rules = cls.args.r
-            if not rules:
-                raise Error("no rule specified")
             try:
-                RuleFinder.load_rules(rules)
+                print("\u001b[33m[Generating syntax tree using sqlglot]\u001b[0m")
+                output = SqlParser.parse_tree(query)
+                print(output)
             except Exception as e:
-                print(e)
-                raise Error("rule file is not found")
-            found = RuleFinder.find_rules(query)
-            for composition in found:
-                rule, positions = composition
-                positions = " ".join([str(el) for el in positions])
-                print(f"Rule {rule.name} found:")
-                print(f"Positions: {positions}")
-                print(f"Comment: {rule.comment}")
-                print()
+                 print(f"\u001b[31m{Manifest.APP_NAME}: error: {e.message}\u001b[0m")
+        elif mode == "format":
+            try:
+                print("\u001b[33m[Formatting sql query using sqlglot]\u001b[0m")
+                output = SqlFormatter.format_one(query)
+                print(output)
+            except Exception as e:
+                 print(f"\u001b[31m{Manifest.APP_NAME}: error: {e.message}\u001b[0m")
+        elif mode == "style":
+            try:
+                print("\u001b[33m[Style sql query use sqlfluff]\u001b[0m")
+                # получаем ссылку на файл с помощью lark
+                # print(cls.args.f)
+                output = SqlfluffCheck(
+                    "lint",
+                    file=cls.args.f,
+                    q=cls.args.q,
+                    rules=cls.args.rules_sqlfluff,
+                    dialect=cls.args.dialect,
+                ).create_str()
+                print(output)
+                #
+                # Меняем позиции в тексте
+            except Exception as e:
+                 print(f"\u001b[31m{Manifest.APP_NAME}: error: {e.message}\u001b[0m")
+        elif mode == "optimize":
+            try:
+                optimization = cls.args.o
+                schema = None
+
+                if optimization in ["optimize", "qualify_columns"]:
+                    if cls.args.s:
+                        schema = SchemaReader.parse_json_schema(cls.args.s)
+                    elif cls.args.F:
+                        schema = SchemaReader.parse_file_json_schema(cls.args.F)
+                    else:
+                        raise Error("schema is not provided")
+                if optimization in StaticOptimizer.get_optimizers():
+                    print(
+                        "\u001b[33m[Optimizing staticly sql query using sqlglot]\u001b[0m"
+                    )
+                    print(f"Optimization: {cls.args.o}")
+                    optimized = StaticOptimizer.optimize(cls.args.o, query, schema)
+                    print(optimized)
+                    print()
+                if optimization in DynamicOptimizer.get_optimizers():
+                    table_sizes = cls.args.t
+                    if not table_sizes:
+                        raise Error("no table sizes specified")
+                    try:
+                        data = ""
+                        with open(cls.args.t, mode="r") as f:
+                            data = f.read()
+                        table_sizes = json.loads(data)
+                        table_sizes = [TableSize(**x) for x in table_sizes]
+                    except FileNotFoundError as e:
+                        raise Error("file with table sizes not found")
+                    except Exception as e:
+                        raise Error("dict parse error")
+                    print("\u001b[33m[Optimizing dynamicly sql query using lark]\u001b[0m")
+                    print(f"Optimization: {cls.args.o}")
+                    # try:
+                    hints = DynamicOptimizer.optimize(cls.args.o, query, table_sizes)
+                    # except Exception as e:
+                    #     raise Error('invalid table_size format') from e
+                    for hint in hints:
+                        print(f"Hint: {hint[0]}")
+                        print(f"Position: ({hint[1][0]}, {hint[1][1]})")
+            except Exception as e:
+                print(f"\u001b[31m{Manifest.APP_NAME}: error: {e.message}\u001b[0m")
+        elif mode == "anti_pattern":
+            try:
+                print("\u001b[33m[Detecting anti-patterns using sqlcheck]\u001b[0m")
+
+                # TODO: add verbosity level option
+                instance = AntiPatternFinder(verbose=True)
+                sqlcheck_output = ""
+                if cls.args.f:
+                    sqlcheck_output = instance.find_anti_patterns_from_file(cls.args.f)
+                elif cls.args.q:
+                    sqlcheck_output = instance.find_anti_patterns_from_query(cls.args.q)
+                else:
+                    raise Error("either -q or -f argument is required")
+                print(sqlcheck_output)
+            except Exception as e:
+                 print(f"\u001b[31m{Manifest.APP_NAME}: error: {e.message}\u001b[0m")
+        elif mode == "rule":
+            try:
+                print("\u001b[33m[Finding rules using lark]\u001b[0m")
+                rules = cls.args.r
+                if not rules:
+                    raise Error("no rule specified")
+                try:
+                    RuleFinder.load_rules(rules)
+                except Exception as e:
+                    print(e)
+                    raise Error("rule file is not found")
+                found = RuleFinder.find_rules(query)
+                for composition in found:
+                    rule, positions = composition
+                    positions = " ".join([str(el) for el in positions])
+                    print(f"Rule {rule.name} found:")
+                    print(f"Positions: {positions}")
+                    print(f"Comment: {rule.comment}")
+                    print()
+            except Exception as e:
+                 print(f"\u001b[31m{Manifest.APP_NAME}: error: {e.message}\u001b[0m")
         elif mode == "construct":
             for mode in cls.args.c:
                 cls.analyze_one(query, mode)
