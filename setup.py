@@ -14,7 +14,7 @@ setup(name=Manifest.APP_NAME,
       packages= find_packages(),
       install_requires = Manifest.REQUIREMENTS ,
       description=Manifest.APP_DESCRIPTION,
-      long_description=open('README.md').read(),
+      
       python_requires=">=3.7.*",
       entry_points={
         'console_scripts': [

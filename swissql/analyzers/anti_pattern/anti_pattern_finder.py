@@ -2,6 +2,7 @@ import os
 
 from swissql.utils.exceptions import Error
 
+
 class AntiPatternFinder:
     def __init__(self, verbose: bool = True):
         """

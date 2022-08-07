@@ -14,33 +14,36 @@ from sqlglot.optimizer.qualify_columns import qualify_columns
 from sqlglot.optimizer.quote_identities import quote_identities
 from sqlglot.optimizer.unnest_subqueries import unnest_subqueries
 
+
 class StaticOptimizer:
     optimizers = {
-        'optimize': optimize,
-        'normalize': normalize,
-        'eliminate_subqueries': eliminate_subqueries,
-        'expand_multi_table_selects': expand_multi_table_selects,
-        'isolate_table_selects': isolate_table_selects,
-        'optimize_joins': optimize_joins,
-        'pushdown_predicates': pushdown_predicates,
-        'pushdown_projections': pushdown_projections,
-        'qualify_tables': qualify_tables,
-        'qualify_columns': qualify_columns,
-        'quote_identities': quote_identities,
-        'unnest_subqueries': unnest_subqueries,
+        "optimize": optimize,
+        "normalize": normalize,
+        "eliminate_subqueries": eliminate_subqueries,
+        "expand_multi_table_selects": expand_multi_table_selects,
+        "isolate_table_selects": isolate_table_selects,
+        "optimize_joins": optimize_joins,
+        "pushdown_predicates": pushdown_predicates,
+        "pushdown_projections": pushdown_projections,
+        "qualify_tables": qualify_tables,
+        "qualify_columns": qualify_columns,
+        "quote_identities": quote_identities,
+        "unnest_subqueries": unnest_subqueries,
     }
 
     @classmethod
-    def optimize(cls, optimizer: str, sql: str, schema: Union[dict, None] = None) -> Expression: 
-        expr = parse_one(sql, read='spark') 
+    def optimize(
+        cls, optimizer: str, sql: str, schema: Union[dict, None] = None
+    ) -> Expression:
+        expr = parse_one(sql, read="spark")
         optimizer = cls.optimizers[optimizer]
-        optimized = optimizer(expr,schema).sql(pretty=True)
-        # if optimizer == 'qualify_columns':
-        #     optimized = optimizer(expr, schema).sql(pretty=True)
-        # else:
-        #     optimized = optimizer(expr).sql(pretty=True)
+        # optimized = optimizer(expr,schema).sql(pretty=True)
+        if optimizer in ["qualify_columns", "optimize"]:
+            optimized = optimizer(expr, schema).sql(pretty=True)
+        else:
+            optimized = optimizer(expr).sql(pretty=True)
         return optimized
 
     @classmethod
     def get_optimizers(cls) -> list[str]:
-        return cls.optimizers.keys()
+        return list(cls.optimizers.keys())

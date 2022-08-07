@@ -2,6 +2,7 @@ from typing import Optional
 from lark import Lark, Tree
 from dataclasses import dataclass
 
+
 @dataclass
 class CustomRule:
     name: str
@@ -13,9 +14,9 @@ class CustomRule:
     def __initialise_parser(self) -> None:
         self.parser = Lark(
             self.grammar,
-            parser='lalr',
-            lexer='basic',
-            start='start',
+            parser="lalr",
+            lexer="basic",
+            start="start",
             propagate_positions=True,
         )
 
@@ -28,4 +29,3 @@ class CustomRule:
         if not self.parser:
             self.__initialise_parser()
         return repr(self.parser.parse(sql))
-

@@ -2,16 +2,18 @@ from sqlglot import parse_one
 from sqlglot.errors import ParseError
 from swissql.utils.exceptions import Error
 
+
 class SqlParser:
     # parser: Lark
 
     @classmethod
     def parse_tree(cls, sql: str) -> str:
         try:
-            tree = parse_one(sql, read='spark')
+            tree = parse_one(sql, read="spark")
         except ParseError as e:
-            raise Error('Spark SQL parse error') from e
+            raise Error("Spark SQL parse error") from e
         return repr(tree)
+
     # @classmethod
     # def initialize(cls, lexer='basic'):
     #     grammar = ''

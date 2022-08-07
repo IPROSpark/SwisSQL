@@ -7,6 +7,7 @@ class Error(Exception):
     Error class is used to raise exceptions
 
     """
+
     def __init__(self, message: str):
         super().__init__()
         self.message = message

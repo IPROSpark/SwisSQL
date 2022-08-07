@@ -1,1 +1,1 @@
-select * from users
+SELECT * FROM large_df LEFT JOIN small_df_a LEFT JOIN small_df_b LEFT JOIN small_df_c
