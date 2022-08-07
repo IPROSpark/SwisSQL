@@ -328,13 +328,19 @@ SELECT * FROM table
 select * from tableA
 ```
 
-
 ## Стек
 - [argparse](https://docs.python.org/3/library/argparse.html#module-argparse) - Построение CLI 
 - [sqlglot](https://github.com/tobymao/sqlglot) - Синтаксический разбор SparkSQL, оптимизация и форматирование
 - [sqlfluff](https://github.com/sqlfluff/sqlfluff) - Стилистический анализ SparkSQL, рекомендации по стилю и форматирование
 - [sqlcheck](https://github.com/jarulraj/sqlcheck) - Детекция анти-паттернов в запросах SparkSQL. Рекоммендации по улучшению кода.
 - [Lark](https://github.com/lark-parser/lark) - Парсинг на основе BNF грамматики. Проверка строк на наличие SQL запроса, пользовательские правила.
+
+
+## Что мы очень хотели, но не успели сделать
+- Распараллеливание вычислений при вызове `swissql all` - позволило бы в несколько раз ускорить выполнение программы
+- Анализ плана запроса
+- Красивый веб-интерфейс
+- Поиск антипаттернов в SparkSQL с использованием ML/GNN
 
 
 ## Авторы
