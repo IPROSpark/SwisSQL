@@ -328,10 +328,6 @@ SELECT * FROM table
 select * from tableA
 ```
 
-### Query_Planning
----
-Планы запросов TODO: <...> Дописать
-
 
 ## Стек
 - [argparse](https://docs.python.org/3/library/argparse.html#module-argparse) - Построение CLI 
