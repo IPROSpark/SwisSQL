@@ -328,6 +328,11 @@ SELECT * FROM table
 select * from tableA
 ```
 
+## Архитектура решения
+
+![image](https://user-images.githubusercontent.com/43730314/183287044-f5babc47-f88a-4b03-ad47-d66bff734bf6.png)
+
+
 ## Стек
 - [argparse](https://docs.python.org/3/library/argparse.html#module-argparse) - Построение CLI 
 - [sqlglot](https://github.com/tobymao/sqlglot) - Синтаксический разбор SparkSQL, оптимизация и форматирование
