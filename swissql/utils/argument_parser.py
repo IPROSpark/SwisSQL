@@ -114,7 +114,7 @@ class ArgParser:
         cls.parser.add_argument(
             '-r',
             # "--rule",
-            help='specify rule file',
+            help='specify rule files as list',
             action='append'
         )
         cls.parser.add_argument(
