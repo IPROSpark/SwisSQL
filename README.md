@@ -16,7 +16,7 @@
 - Решают: команда **I PRO**
 - [Ссылка на репозиторий](https://github.com/IPROSpark/SparkSQL-Analyzer)
 - [Ссылка на PyPi](https://pypi.org/project/swissql/)
-- [Ссылка на Google Colab](https://colab.research.google.com/drive/1FvKimAp5KS31JD7_8_cJW2yAJ289yZKh?usp=sharing) - здесь можно попробовать код в действии!
+- [Ссылка на Google Colab](https://colab.research.google.com/drive/1FvKimAp5KS31JD7_8_cJW2yAJ289yZKh?usp=sharing) - здесь можно попробовать код в действии онлайн, достаточно запустить все ячейки!
 
 ## Постановка задачи
 Необходимо разработать статический анализатор SparkSQL кода. Грамматика должна расширяться через отдельный BNF файл (https://en.wikipedia.org/wiki/Backus–Naur_form). Есть возможность добавлять пользовательские проверки в коде. Есть ООП интерфейс для использования из кода. Инструмент должен быть быстрым и изолированным. 
