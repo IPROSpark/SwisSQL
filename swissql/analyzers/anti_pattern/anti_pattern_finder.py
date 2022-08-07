@@ -1,5 +1,7 @@
 import os
 
+from swissql.utils.exceptions import Error
+
 class AntiPatternFinder:
     def __init__(self, verbose: bool = True):
         """
@@ -16,7 +18,7 @@ class AntiPatternFinder:
         # Check sqlcheck availability in system
         self.isavailable = os.system("sqlcheck -version") == 0
         if not self.isavailable:
-            raise Exception("sqlcheck not found in system")
+            raise Error("sqlcheck not found in system")
 
     def find_anti_patterns_from_file(self, sql_filename: str) -> str:
         """
@@ -27,7 +29,7 @@ class AntiPatternFinder:
         """
         # Check availability of sqlcheck
         if not self.isavailable:
-            raise Exception("sqlcheck not found in system")
+            raise Error("sqlcheck not found in system")
 
         # Run sqlcheck on sqlfile
         # Timeout in case of wrong sqlfile

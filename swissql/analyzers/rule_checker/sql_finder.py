@@ -54,7 +54,7 @@ class SqlFinder:
         sqls = list()
         for string in strings:
             string = ''.join(string)
-            string = string.strip('"').strip("'").strip(';')   
+            string = string.strip('"').strip("'").strip(';')
             try:
                 tree = cls.sql_parser.parse(string)
             except Exception as e:
