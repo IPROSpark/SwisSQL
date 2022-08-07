@@ -16,7 +16,7 @@
 - Решают: команда **I PRO**
 - [Ссылка на репозиторий](https://github.com/IPROSpark/SparkSQL-Analyzer)
 - [Ссылка на PyPi](https://pypi.org/project/swissql/)
-
+- [Ссылка на Google Colab](https://colab.research.google.com/drive/1FvKimAp5KS31JD7_8_cJW2yAJ289yZKh?usp=sharing)
 
 ## Постановка задачи
 Необходимо разработать статический анализатор SparkSQL кода. Грамматика должна расширяться через отдельный BNF файл (https://en.wikipedia.org/wiki/Backus–Naur_form). Есть возможность добавлять пользовательские проверки в коде. Есть ООП интерфейс для использования из кода. Инструмент должен быть быстрым и изолированным. 
@@ -62,7 +62,7 @@ pip install swissql
 
 ## Функционал
 
-Наглядно использование swissql описано в нашем [ноутбуке](https://github.com/IPROSpark/SparkSQL-Analyzer/blob/main/examples/usage_example.ipynb). Ниже приведены его фрагменты с объяснением того, как и что работает.
+Наглядно использование swissql описано в нашем [ноутбуке на Google Colab](https://colab.research.google.com/drive/1FvKimAp5KS31JD7_8_cJW2yAJ289yZKh#scrollTo=H8aX7EyU9cTU). Ниже приведены его фрагменты с объяснением того, как и что работает.
 
 ### Syntax
 ---
