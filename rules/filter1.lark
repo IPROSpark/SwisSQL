@@ -1,6 +1,6 @@
 Some comment :END_OF_COMMENT:
 start: /\w+/ start |  pattern start | /\w+/ | pattern
-pattern: "I PRO"
+pattern: "I_PRO"
 %import common.INT
 %ignore " "
 %ignore "\n"
