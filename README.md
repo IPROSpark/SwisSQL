@@ -31,7 +31,6 @@ swissql - это python библиотека для статического а�
 - [Anti_pattern - выявление антипаттернов](#Anti_pattern)
 - [Rule - поддержка пользовательских правил на основе BNF](#Rule)
 - [Extract - анализ SQL строк в кодовой базе](#Extract)
-- [Query Planning - план запроса](#Query_Planning)
 
 ## Плюшки
 
@@ -47,8 +46,17 @@ swissql - это python библиотека для статического а�
 
 ## Установка
 
-TODO: <...> Дописать и проверить
-```
+```bash
+# Установка sqlcheck ( https://github.com/jarulraj/sqlcheck#installation )
+# Debian
+wget https://github.com/jarulraj/sqlcheck/releases/download/v1.3/sqlcheck-x86_64.deb
+dpkg -i sqlcheck-x86_64.deb
+
+# Windows
+# При установке для Windows не забудьте добавить sqlcheck в PATH
+wget https://github.com/jarulraj/sqlcheck/releases/download/v1.3/sqlcheck.exe
+
+
 pip install swissql
 ```
 
