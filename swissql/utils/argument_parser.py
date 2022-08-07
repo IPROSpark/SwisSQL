@@ -62,9 +62,7 @@ class ArgParser:
 
     @classmethod
     def initialize(cls) -> None:
-        RuleFinder.initialize()
         
-        rules = RuleFinder.get_rules()       
         optimizers: list[str] = StaticOptimizer.get_optimizers()
         cls.parser = ArgumentParser(
             prog=Manifest.APP_NAME,
@@ -116,8 +114,8 @@ class ArgParser:
         cls.parser.add_argument(
             '-r',
             # "--rule",
-            choices=rules+['all',],
-            help='specify rule file'
+            help='specify rule file',
+            action='append'
         )
         cls.parser.add_argument(
             '-c',
@@ -198,13 +196,14 @@ class ArgParser:
                 print(sqlcheck_output)
         elif mode == 'rule':
             print('\u001b[33m[Finding rules using lark]\u001b[0m')
-            rule = cls.args.r
-            if not rule:
+            rules = cls.args.r
+            if not rules:
                 raise Error('no rule specified')
-            if rule == 'all':
-                RuleFinder.load_rules()
-            else:
-                RuleFinder.load_rule(rule)
+            try:
+                RuleFinder.load_rules(rules)
+            except Exception as e:
+                print(e)
+                raise Error('rule file is not found')
             found = RuleFinder.find_rules(query)
             for composition in found:
                 rule, positions = composition
