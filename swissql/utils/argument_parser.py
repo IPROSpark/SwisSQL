@@ -157,14 +157,14 @@ class ArgParser:
                 output = SqlParser.parse_tree(query)
                 print(output)
             except Exception as e:
-                 print(f"\u001b[31m{Manifest.APP_NAME}: error: {e.message}\u001b[0m")
+                 print(f"\u001b[31m{Manifest.APP_NAME}: error: {e}\u001b[0m")
         elif mode == "format":
             try:
                 print("\u001b[33m[Formatting sql query using sqlglot]\u001b[0m")
                 output = SqlFormatter.format_one(query)
                 print(output)
             except Exception as e:
-                 print(f"\u001b[31m{Manifest.APP_NAME}: error: {e.message}\u001b[0m")
+                 print(f"\u001b[31m{Manifest.APP_NAME}: error: {e}\u001b[0m")
         elif mode == "style":
             try:
                 print("\u001b[33m[Style sql query use sqlfluff]\u001b[0m")
@@ -181,7 +181,7 @@ class ArgParser:
                 #
                 # Меняем позиции в тексте
             except Exception as e:
-                 print(f"\u001b[31m{Manifest.APP_NAME}: error: {e.message}\u001b[0m")
+                 print(f"\u001b[31m{Manifest.APP_NAME}: error: {e}\u001b[0m")
         elif mode == "optimize":
             try:
                 optimization = cls.args.o
@@ -226,7 +226,7 @@ class ArgParser:
                         print(f"Hint: {hint[0]}")
                         print(f"Position: ({hint[1][0]}, {hint[1][1]})")
             except Exception as e:
-                print(f"\u001b[31m{Manifest.APP_NAME}: error: {e.message}\u001b[0m")
+                print(f"\u001b[31m{Manifest.APP_NAME}: error: {e}\u001b[0m")
         elif mode == "anti_pattern":
             try:
                 print("\u001b[33m[Detecting anti-patterns using sqlcheck]\u001b[0m")
@@ -242,7 +242,7 @@ class ArgParser:
                     raise Error("either -q or -f argument is required")
                 print(sqlcheck_output)
             except Exception as e:
-                 print(f"\u001b[31m{Manifest.APP_NAME}: error: {e.message}\u001b[0m")
+                 print(f"\u001b[31m{Manifest.APP_NAME}: error: {e}\u001b[0m")
         elif mode == "rule":
             try:
                 print("\u001b[33m[Finding rules using lark]\u001b[0m")
@@ -263,7 +263,7 @@ class ArgParser:
                     print(f"Comment: {rule.comment}")
                     print()
             except Exception as e:
-                 print(f"\u001b[31m{Manifest.APP_NAME}: error: {e.message}\u001b[0m")
+                 print(f"\u001b[31m{Manifest.APP_NAME}: error: {e}\u001b[0m")
         elif mode == "construct":
             for mode in cls.args.c:
                 cls.analyze_one(query, mode)
