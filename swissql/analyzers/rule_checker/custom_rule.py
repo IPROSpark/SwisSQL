@@ -8,7 +8,7 @@ class CustomRule:
     grammar: str
     comment: str
 
-    parser: Optional[Lark] = None 
+    parser: Optional[Lark] = None
 
     def __initialise_parser(self) -> None:
         self.parser = Lark(

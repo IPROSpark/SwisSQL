@@ -187,14 +187,15 @@ class ArgParser:
 
             # TODO: add verbosity level option
             instance = AntiPatternFinder(verbose=True)
-            sqlcheck_output = ""
-            if cls.args.f:
-                sqlcheck_output = instance.find_anti_patterns_from_file(cls.args.f)
-            elif cls.args.q:
-                sqlcheck_output = instance.find_anti_patterns_from_query(cls.args.q)
-            else:
-                raise Error("either -q or -f argument is required")
-            print(sqlcheck_output)
+            if instance:
+                sqlcheck_output = ""
+                if cls.args.f:
+                    sqlcheck_output = instance.find_anti_patterns_from_file(cls.args.f)
+                elif cls.args.q:
+                    sqlcheck_output = instance.find_anti_patterns_from_query(cls.args.q)
+                else:
+                    raise Error("either -q or -f argument is required")
+                print(sqlcheck_output)
         elif mode == 'rule':
             print('\u001b[33m[Finding rules using lark]\u001b[0m')
             rule = cls.args.r
