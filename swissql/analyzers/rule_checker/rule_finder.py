@@ -7,10 +7,6 @@ from swissql.utils.exceptions import Error
 
 
 class RuleFinder:
-<<<<<<< HEAD
-    SPLITTER: str = ":END_OF_COMMENT:"
-    PATTERN: str = "PATTERN"
-=======
     """
     Class that is used to locate user defined patterns
 
@@ -38,7 +34,6 @@ class RuleFinder:
     """
     SPLITTER: str = ':END_OF_COMMENT:'
     PATTERN: str = 'PATTERN'
->>>>>>> refs/remotes/origin/main
 
     rules: list[CustomRule] = []
 
