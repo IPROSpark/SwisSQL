@@ -4,7 +4,7 @@ from typing import List
 class Manifest:
     APP_NAME: str = "swissql"
     APP_DESCRIPTION: str = "Spark SQL analytic engine"
-    APP_VERSION: str = "v0.2.3"
+    APP_VERSION: str = "v0.2.4"
     LICENSE: str = "GNU"
     EMAIL: str = "andrey24072002@bk.ru"
     REQUIREMENTS: List = [
