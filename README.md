@@ -56,7 +56,7 @@ dpkg -i sqlcheck-x86_64.deb
 # При установке для Windows не забудьте добавить sqlcheck в PATH
 wget https://github.com/jarulraj/sqlcheck/releases/download/v1.3/sqlcheck.exe
 
-
+# После sqlcheck, установим swissql
 pip install swissql
 ```
 
